@@ -1,14 +1,14 @@
 package com.sparta.hanhae99board_sa.controller;
 
+
 import com.sparta.hanhae99board_sa.dto.BoardRequestDto;
 import com.sparta.hanhae99board_sa.dto.BoardResponseDto;
 import com.sparta.hanhae99board_sa.dto.ResponseDto;
-import com.sparta.hanhae99board_sa.security.UserDetailsImpl;
 import com.sparta.hanhae99board_sa.service.BoardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -18,36 +18,31 @@ public class BoardController {
 
     private final BoardService boardService;
 
-    // 게시글 작성하기 (로그인 필요)
+    // 게시글 작성하기
     @PostMapping("/post")
-    public BoardResponseDto createPost(@RequestBody BoardRequestDto boardRequestDto,
-                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return boardService.createPost(boardRequestDto, userDetails.getUser().getUsername());
+    public BoardResponseDto createPost(@RequestBody BoardRequestDto boardRequestDto, HttpServletRequest request) {
+        return boardService.createPost(boardRequestDto, request);
     }
 
-    // 모든 게시글 보여주기 (로그인 필요없음)
+    // 모든 게시글 보여주기
     @GetMapping("/posts")
     public List<BoardResponseDto> getPosts() {
         return boardService.getPosts();
     }
 
-    // 특정 게시글 조회 (로그인 필요없음)
+    // 게시글 상세 조회
     @GetMapping("/post/{id}")
     public BoardResponseDto getPost(@PathVariable Long id) {
         return boardService.getPost(id);
     }
 
-    // 특정 게시글 업데이트
     @PutMapping("/post/{id}")
-    public BoardResponseDto updatePost(@PathVariable Long id,
-                                       @RequestBody BoardRequestDto boardRequestDto,
-                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return boardService.updatePost(id, boardRequestDto, userDetails.getUser().getUsername());
+    public BoardResponseDto updatePost(@PathVariable Long id, BoardRequestDto boardRequestDto, HttpServletRequest request) {
+        return boardService.updatePost(id, boardRequestDto, request);
     }
 
-    // 게시글 삭제
     @DeleteMapping("/post/{id}")
-    public ResponseDto<String>  deletePost(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return boardService.deletePost(id, userDetails.getUser().getUsername());
+    public BoardResponseDto deletePost(@PathVariable Long id, HttpServletRequest request) {
+        return boardService.deletePost(id, request);
     }
 }
