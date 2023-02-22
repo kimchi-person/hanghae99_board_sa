@@ -10,18 +10,18 @@ import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/api")
 public class UserController {
 
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseDto signup(@RequestBody UserRequestDto userRequestDto) {
+    public ResponseDto<String> signup(@RequestBody UserRequestDto userRequestDto) {
         return userService.signup(userRequestDto);
     }
 
     @PostMapping("login")
-    public ResponseDto login(@RequestBody UserRequestDto userRequestDto, HttpServletResponse response) {
+    public ResponseDto<String> login(@RequestBody UserRequestDto userRequestDto, HttpServletResponse response) {
 
         return userService.login(userRequestDto, response);
     }

@@ -5,8 +5,11 @@ import com.sparta.hanhae99board_sa.dto.BoardRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.aspectj.weaver.ast.Literal;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -28,12 +31,16 @@ public class Board extends Timestamped {
     private String username;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
+    private List<Comment> commentList = new ArrayList<>();
 
 
     public Board(BoardRequestDto boardRequestDto, User user) {
         this.user = user;
+        this.username = user.getUsername();
         this.title = boardRequestDto.getTitle();
         this.content = boardRequestDto.getContent();
     }
